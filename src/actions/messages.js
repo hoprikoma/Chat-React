@@ -2,15 +2,24 @@ import { ADD_MESSAGE_ACTION} from '../constants/action';
 
 export const addMessage = (message, username) => {
 
-    let ws = new WebSocket('ws://172.16.120.33:8080')
+    let ws = new WebSocket('wss://srrj6.sse.codesandbox.io/')
+
+    let fullMessage = {
+      "type" : "ADD_MESSAGE",
+      "username" : username,
+      "message" : message
+    }
+
+    fullMessage = JSON.stringify(fullMessage)
+    console.log(fullMessage);
+    
   
 
-    // ws.onmessage = evt => {
-    // const message = JSON.parse(evt.data)
-    // this.setState({dataFromServer: message})
-    // }
+    ws.onmessage = evt => {
+      console.log(evt.data);
+    }
 
-    ws.onopen = () => ws.send(message);
+    ws.onopen = () => ws.send(fullMessage);
 
     ws.onclose = () => {
     console.log('disconnected')
