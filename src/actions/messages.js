@@ -1,7 +1,22 @@
-import React from 'react';
-import { ADD_MESSAGE_ACTION, REMOVE_MESSAGE_ACTION } from '../constants/action';
+import { ADD_MESSAGE_ACTION} from '../constants/action';
 
 export const addMessage = (message, username) => {
+
+    let ws = new WebSocket('ws://172.16.120.33:8080')
+  
+
+    // ws.onmessage = evt => {
+    // const message = JSON.parse(evt.data)
+    // this.setState({dataFromServer: message})
+    // }
+
+    ws.onopen = () => ws.send(message);
+
+    ws.onclose = () => {
+    console.log('disconnected')
+
+    }
+
   return {
     type: ADD_MESSAGE_ACTION,
     message,
@@ -9,10 +24,22 @@ export const addMessage = (message, username) => {
   };
 };
 
-export const removeMessage = index => {
-  return {
-    type: REMOVE_MESSAGE_ACTION,
-    index,
-  };
-};
+// export const wsConnection = () => {
+//   return {
+//     type: WS_CONNECTING
+//   };
+// };
+
+
+// export const wsOpenened = () => {
+//   return {
+//     type: WS_OPENED
+//   };
+// };
+
+// export const wsClosed = () => {
+//   return {
+//     type: WS_CLOSED
+//   };
+// };
 

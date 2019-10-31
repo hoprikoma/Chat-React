@@ -1,29 +1,28 @@
-import React, { Component, Fragment } from "react";
-import MessageItem from "./MessageItem";
+import React from 'react';
+import MessageItem from './MessageItem';
+import { connect } from 'react-redux';
 
-class MessageList extends Component {
-  render() {
-    const hasMessage = this.props.messages.length > 0;
+const MessageList = ({ messages }) => {
+  return (
+    <ul>
+      {messages.map((message, i) => {
+        return (<MessageItem 
+          key={i} 
+          index={i} 
+          message={message} 
+        />);
+      })}
+  {messages.length === 0 && <li>Il n'y a pas de message <span role="img" aria-label="zzz">😴</span></li>}
+    </ul>
+  );
+};
 
-    return (
-      <Fragment>
-        <ul>
-          {this.props.messages.length > 0 &&
-            this.props.messages.map((message, i) => {
-              return (
-                <MessageItem
-                  handleOnClick={this.handleOnClick}
-                  key={i}
-                  message={message}
-                />
-              );
-            })}
-        </ul>
+const mapStateToProps = state => {
+  return {
+    messages: state.message.messages,
+  };
+};
 
-        {!hasMessage && <p>Il n'y a pas de message 😴</p>}
-      </Fragment>
-    );
-  }
-}
+const connectComponent = connect(mapStateToProps);
 
-export default MessageList;
+export default connectComponent(MessageList);

@@ -1,7 +1,5 @@
-import React from 'react';
 import {
   ADD_MESSAGE_ACTION,
-  REMOVE_MESSAGE_ACTION,
 } from './../constants/action';
 
 const INITIAL_STATE = {
@@ -16,11 +14,6 @@ const messages = (state = INITIAL_STATE, action) => {
           ...state.messages,
           { message: action.message, username: action.username },
         ],
-      };
-
-    case REMOVE_MESSAGE_ACTION:
-      return {
-        messages: state.messages.filter((message, i) => i !== action.index),
       };
 
     default:

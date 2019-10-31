@@ -1,52 +1,62 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addMessage } from './../actions/messages';
 
-class MessageBar extends PureComponent {
-  state = { message: "", username: "", hasError: false };
 
-  handleOnChange = e => {
-    this.setState({ [e.target.id]: e.target.value, hasError: false , hasErrorChara: false});
-  };
+class MessageBar extends Component {
+  
+  
+  
+  login = prompt("Please enter your name:");
 
-  handleOnSubmit = e => {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.state = { message: '' };
+  }
+
+  handleChange(e) {
+    this.setState({ message: e.target.value });
+  }
+
+  handleSubmit(e) {
     e.preventDefault();
 
-    if (this.state.message.length > 100) {
-      this.setState({ hasErrorChara: true });
+    if (this.state.message !== '') {
+      this.props.onAddMessage(this.state.message, this.login);
+      this.setState({ message: '' });
     }
-    else if (this.state.message) {
-      this.setState({ message: "" });
-      this.props.handleOnSubmit(this.state.message);
-    } else {
-      this.setState({ hasError: true });
-    }
-    
-    
-  };
+  }
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleOnSubmit}>
-          <input
-            id="message"
-            value={this.state.message}
-            onChange={this.handleOnChange}
-            placeholder="Votre message 📄"
-            type="text"
-          />
-          <button type="submit" > Envoyer 🚀 </button>
-          <br />
-            {this.state.hasError && <p>Il faut mettre un message 😐</p> }
-            {this.state.hasErrorChara && <p>Vous avez dépassez les 100 caractères 🤐</p>}
-        </form>
-      </div>
+      <form
+        onSubmit={this.handleSubmit}
+        style={{ display: 'flex', padding: 10 }}
+      >
+        <input
+          value={this.state.message}
+          onChange={this.handleChange}
+          placeholder="Votre message 📄"
+          type="text"
+        />
+        <br />
+        <button type="submit">Envoyer <span role="img" aria-label="rocket">🚀</span></button>
+      </form>
     );
   }
 }
 
-MessageBar.propTypes = {
-  handleOnSubmit: PropTypes.func.isRequired
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddMessage: (message, username) => {
+      dispatch(addMessage(message, username));
+    },
+  };
 };
 
-export default MessageBar;
+const connectComponent = connect(null, mapDispatchToProps);
+
+export default connectComponent(MessageBar);
